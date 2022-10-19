@@ -1,0 +1,100 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends PanelContainer
+
+onready var _panelContainer = $HBoxContainer/HSplitContainer/PanelContainer
+onready var _gridContainer = $HBoxContainer/HSplitContainer/VBoxContainer/HBoxContainer/ScrollContainer/GridContainer
+#onready var _animatedSpriteScene = preload(\"res://scenes/examples/animated-sprite/animated-sprite.tscn\")
+#onready var _animatedSpriteSheetScene = preload(\"res://scenes/examples/animated-sprite-sheet/animated-sprite-sheet.tscn\")
+#onready var _animationPlayerScene = preload(\"res://scenes/examples/animation-player/animation-player.tscn\")
+#onready var _animationTreeScene = preload(\"res://scenes/examples/animation-tree/animation-tree.tscn\")
+onready var _exampleNodeScene = preload(\"res://scenes/example-node/example-node.tscn\")
+var listOfExamples = [\"animated-sprite\", \"animated-sprite-sheet\", \"animation-player\", \"animation-tree\"]
+func _ready() -> void:
+	InitSignals()
+	CreateExampleUI()
+
+func InitSignals():
+	var _ignore = Signals.connect(\"LoadExample\", self, \"LoadExample\")
+
+func CreateExampleUI():
+	for exampleName in listOfExamples:
+		var exampleInstance = _exampleNodeScene.instance()
+		exampleInstance.SetText(exampleName)
+		_gridContainer.add_child(exampleInstance)
+
+func ClearExamples():
+	for node in _panelContainer.get_children():
+		node.queue_free()
+
+func LoadExample(exampleName):
+	ClearExamples()
+	var example = load(\"res://scenes/examples/\" + exampleName + \"/\" + exampleName + \".tscn\")
+	_panelContainer.add_child(example.instance())
+"
+
+[node name="Main" type="PanelContainer"]
+self_modulate = Color( 0.223529, 0.223529, 0.223529, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = SubResource( 1 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 1017.0
+margin_bottom = 593.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HSplitContainer" type="HSplitContainer" parent="HBoxContainer"]
+margin_right = 1010.0
+margin_bottom = 586.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/HSplitContainer"]
+margin_right = 200.0
+margin_bottom = 586.0
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/HSplitContainer/VBoxContainer"]
+margin_right = 200.0
+margin_bottom = 586.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/HSplitContainer/VBoxContainer/HBoxContainer"]
+self_modulate = Color( 0.223529, 0.223529, 0.223529, 1 )
+margin_right = 200.0
+margin_bottom = 586.0
+rect_clip_content = false
+size_flags_horizontal = 3
+size_flags_vertical = 3
+scroll_horizontal_enabled = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GridContainer" type="GridContainer" parent="HBoxContainer/HSplitContainer/VBoxContainer/HBoxContainer/ScrollContainer"]
+margin_right = 200.0
+margin_bottom = 586.0
+rect_min_size = Vector2( 200, 0 )
+rect_clip_content = true
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/vseparation = 3
+
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/HSplitContainer"]
+self_modulate = Color( 0.223529, 0.223529, 0.223529, 1 )
+margin_left = 212.0
+margin_right = 1010.0
+margin_bottom = 586.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
